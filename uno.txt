@@ -1,2 +1,1 @@
-Primera línea
-Segunda línea
+dos
