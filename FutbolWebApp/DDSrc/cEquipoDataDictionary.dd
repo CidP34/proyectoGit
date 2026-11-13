@@ -19,6 +19,36 @@ Class cEquipoDataDictionary is a DataDictionary
         Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
         Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
         Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+
+        Set Cascade_Delete_State to False
+
+        Set Field_Option Field Equipo.Nombre DD_Required to True
+        Set Status_Help Field Equipo.Nombre to "Nombre oficial del club"
     End_Procedure
+
+    // Valores NUEVOS al guardar
+    Procedure Update
+        Forward Send Update
+        Add 1 to Liga.Equipos
+    End_Procedure
+
+    // Valores ANTIGUOS al editar y al borrar: si el equipo cambia de liga,
+    // resta en la anterior y suma en la nueva
+    Procedure Backout
+        Forward Send Backout
+        Subtract 1 from Liga.Equipos
+    End_Procedure
+
+    // Se ejecuta después de Update: Liga.Equipos ya cuenta este equipo
+    Function Validate_Save Returns Integer
+        Integer iError
+        Forward Get Validate_Save to iError
+        If (iError <> 0) Function_Return iError
+        If (Liga.Equipos > Liga.EquiposMax) Begin
+            Send UserError ("La liga " + Trim(Liga.Nombre) + " ya tiene el máximo de equipos (" + String(Liga.EquiposMax) + ")")
+            Function_Return 1
+        End
+        Function_Return 0
+    End_Function
 
 End_Class

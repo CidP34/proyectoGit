@@ -15,6 +15,9 @@ Class cEntrenadorDataDictionary is a DataDictionary
         Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
         Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
         Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+
+        Set Field_Option Field Entrenador.Nombre DD_Required to True
+        Set Field_Option Field Entrenador.Apellido DD_Required to True
     End_Procedure
 
 End_Class
