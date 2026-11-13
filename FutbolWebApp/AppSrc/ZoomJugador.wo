@@ -1,10 +1,14 @@
 Use cWebView.pkg
 Use cWebForm.pkg
 Use cWebPanel.pkg
+Use cWebButton.pkg
 Use cLigaDataDictionary.dd
 Use cEquipoDataDictionary.dd
 Use cJugadorDataDictionary.dd
+Use cPosicionDataDictionary.dd
+Use cJugadorPosicionDataDictionary.dd
 
+Register_Object oSelectPosicion
 Register_Object oSelectEquipo
 
 Object oZoomJugador is a cWebView
@@ -21,6 +25,14 @@ Object oZoomJugador is a cWebView
 
     Object oJugador_DD is a cJugadorDataDictionary
         Set DDO_Server to oEquipo_DD
+    End_Object
+
+    Object oPosicion_DD is a cPosicionDataDictionary
+    End_Object
+
+    Object oJugadorPosicion_DD is a cJugadorPosicionDataDictionary
+        Set DDO_Server to oJugador_DD
+        Set DDO_Server to oPosicion_DD
     End_Object
 
     Set Main_DD to oJugador_DD
@@ -59,7 +71,51 @@ Object oZoomJugador is a cWebView
             End_Procedure
         End_Object
 
+        // Sprint 2 - Undefined: jugador y posicion no se relacionan directamente
+        // (N:M a través de jugadorposicion)
+        Object oAsignarPosicion is a cWebButton
+            Set psCaption to "Asignar posición"
+            Set piColumnSpan to 4
+
+            Procedure OnClick
+                Send NavigateForward of oSelectPosicion Self
+            End_Procedure
+
+            Procedure OnGetNavigateForwardData tWebNavigateData ByRef NavigateData Handle hoToView
+                Move True to NavigateData.bSaveBeforeNavigate
+            End_Procedure
+
+            // Al volver, NavigateData.sRowID es la posición elegida
+            Procedure OnNavigateBack Handle hoCallback tWebNavigateData NavigateData
+                RowID riPosicion
+                Move (DeserializeRowID(NavigateData.sRowID)) to riPosicion
+                Send Clear of oJugadorPosicion_DD
+                Send FindByRowID of oPosicion_DD Posicion.File_Number riPosicion
+                Send Request_Save of oJugadorPosicion_DD
+            End_Procedure
+        End_Object
+
     End_Object
 
+    WebRegisterPath ntNavigateForward oSelectPosicion
     WebRegisterPath ntNavigateForward oSelectEquipo
+
+    // Sprint 2: muestra el tipo de navegación recibido
+    Procedure OnNavigateForward tWebNavigateData NavigateData Handle hoInvokingView Handle hoInvokingObject
+        String sTipo
+        Case Begin
+            Case (NavigateData.eNavigateType = nfFromMain)
+                Move "FromMain" to sTipo
+                Case Break
+            Case (NavigateData.eNavigateType = nfFromChild)
+                Move "FromChild" to sTipo
+                Case Break
+            Case (NavigateData.eNavigateType = nfFromParent)
+                Move "FromParent" to sTipo
+                Case Break
+            Case Else
+                Move "Undefined" to sTipo
+        Case End
+        Send ShowInfoBox ("Navegación: " + sTipo)
+    End_Procedure
 End_Object

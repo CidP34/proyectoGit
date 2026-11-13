@@ -54,4 +54,14 @@ Object oSelectEquipo is a cWebView
     End_Object
 
     WebRegisterPath ntNavigateForward oZoomEquipo
+
+    // Desde ZoomLiga (nfFromParent) la lista ya sale filtrada por esa liga
+    Procedure OnNavigateForward tWebNavigateData NavigateData Handle hoInvokingView Handle hoInvokingObject
+        If (NavigateData.eNavigateType = nfFromParent) Begin
+            WebSet psCaption to ("Equipos de " + Trim(Liga.Nombre))
+        End
+        Else Begin
+            WebSet psCaption to "Equipos"
+        End
+    End_Procedure
 End_Object

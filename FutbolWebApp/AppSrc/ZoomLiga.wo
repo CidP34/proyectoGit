@@ -1,7 +1,14 @@
 Use cWebView.pkg
 Use cWebForm.pkg
 Use cWebPanel.pkg
+Use cWebButton.pkg
+Use cWebList.pkg
+Use cWebColumn.pkg
 Use cLigaDataDictionary.dd
+Use cEquipoDataDictionary.dd
+
+Register_Object oSelectEquipo
+Register_Object oZoomEquipo
 
 Object oZoomLiga is a cWebView
     Set psCaption to "Liga"
@@ -9,6 +16,11 @@ Object oZoomLiga is a cWebView
     Set piColumnCount to 12
 
     Object oLiga_DD is a cLigaDataDictionary
+    End_Object
+
+    Object oEquipo_DD is a cEquipoDataDictionary
+        Set DDO_Server to oLiga_DD
+        Set Constrain_File to Liga.File_Number    // solo equipos de la liga actual
     End_Object
 
     Set Main_DD to oLiga_DD
@@ -41,6 +53,58 @@ Object oZoomLiga is a cWebView
             Set piColumnSpan to 12
         End_Object
 
+        // Sprint 2 - From parent 1.º: botón que abre SelectEquipo filtrada
+        Object oVerEquipos is a cWebButton
+            Set psCaption to "Ver equipos"
+            Set piColumnSpan to 4
+
+            Procedure OnClick
+                Send NavigateForward of oSelectEquipo Self
+            End_Procedure
+
+            Procedure OnGetNavigateForwardData tWebNavigateData ByRef NavigateData Handle hoToView
+                Move True to NavigateData.bSaveBeforeNavigate
+            End_Procedure
+        End_Object
+
+        // Sprint 2 - From parent 2.º: los equipos dentro del propio Zoom
+        Object oEquiposList is a cWebList
+            Set Server to oEquipo_DD
+            Set piHeight to 220
+            Set pbServerOnRowClick to True
+            Set psPlaceHolder to "Esta liga no tiene equipos"
+
+            Object oEquipoNombre is a cWebColumn
+                Entry_Item Equipo.Nombre
+                Set psCaption to "Equipos de la liga"
+            End_Object
+
+            Procedure OnRowClick String sRowID
+                Send NavigateForward of oZoomEquipo Self
+            End_Procedure
+        End_Object
+
     End_Object
 
+    WebRegisterPath ntNavigateForward oSelectEquipo
+    WebRegisterPath ntNavigateForward oZoomEquipo
+
+    // Sprint 2: muestra el tipo de navegación recibido
+    Procedure OnNavigateForward tWebNavigateData NavigateData Handle hoInvokingView Handle hoInvokingObject
+        String sTipo
+        Case Begin
+            Case (NavigateData.eNavigateType = nfFromMain)
+                Move "FromMain" to sTipo
+                Case Break
+            Case (NavigateData.eNavigateType = nfFromChild)
+                Move "FromChild" to sTipo
+                Case Break
+            Case (NavigateData.eNavigateType = nfFromParent)
+                Move "FromParent" to sTipo
+                Case Break
+            Case Else
+                Move "Undefined" to sTipo
+        Case End
+        Send ShowInfoBox ("Navegación: " + sTipo)
+    End_Procedure
 End_Object
