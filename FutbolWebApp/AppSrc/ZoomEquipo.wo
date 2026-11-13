@@ -28,6 +28,7 @@ Object oZoomEquipo is a cWebView
             Entry_Item Equipo.Nombre
             Set psLabel to "Nombre"
             Set piColumnSpan to 12
+            Set psCSSClass to "CampoObligatorio"
         End_Object
 
         // Padre: se elige navegando a su Select (nfFromChild)
@@ -45,23 +46,4 @@ Object oZoomEquipo is a cWebView
     End_Object
 
     WebRegisterPath ntNavigateForward oSelectLiga
-
-    // Sprint 2: muestra el tipo de navegación recibido
-    Procedure OnNavigateForward tWebNavigateData NavigateData Handle hoInvokingView Handle hoInvokingObject
-        String sTipo
-        Case Begin
-            Case (NavigateData.eNavigateType = nfFromMain)
-                Move "FromMain" to sTipo
-                Case Break
-            Case (NavigateData.eNavigateType = nfFromChild)
-                Move "FromChild" to sTipo
-                Case Break
-            Case (NavigateData.eNavigateType = nfFromParent)
-                Move "FromParent" to sTipo
-                Case Break
-            Case Else
-                Move "Undefined" to sTipo
-        Case End
-        Send ShowInfoBox ("Navegación: " + sTipo)
-    End_Procedure
 End_Object
