@@ -1,0 +1,65 @@
+Use cWebView.pkg
+Use cWebForm.pkg
+Use cWebPanel.pkg
+Use cLigaDataDictionary.dd
+Use cEquipoDataDictionary.dd
+Use cEntrenadorDataDictionary.dd
+
+Register_Object oSelectEquipo
+
+Object oZoomEntrenador is a cWebView
+    Set psCaption to "Entrenador"
+    Set peViewType to vtZoom
+    Set piColumnCount to 12
+
+    Object oLiga_DD is a cLigaDataDictionary
+    End_Object
+
+    Object oEquipo_DD is a cEquipoDataDictionary
+        Set DDO_Server to oLiga_DD
+    End_Object
+
+    Object oEntrenador_DD is a cEntrenadorDataDictionary
+        Set DDO_Server to oEquipo_DD
+    End_Object
+
+    Set Main_DD to oEntrenador_DD
+    Set Server to oEntrenador_DD
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oEntrenadorNombre is a cWebForm
+            Entry_Item Entrenador.Nombre
+            Set psLabel to "Nombre"
+            Set piColumnSpan to 12
+        End_Object
+
+        Object oEntrenadorApellido is a cWebForm
+            Entry_Item Entrenador.Apellido
+            Set psLabel to "Apellido"
+            Set piColumnSpan to 12
+        End_Object
+
+        Object oEntrenadorNacionalidad is a cWebForm
+            Entry_Item Entrenador.Nacionalidad
+            Set psLabel to "Nacionalidad"
+            Set piColumnSpan to 12
+        End_Object
+
+        // Padre: se elige navegando a su Select (nfFromChild)
+        Object oEquipoNombre is a cWebForm
+            Entry_Item Equipo.Nombre
+            Set psLabel to "Equipo"
+            Set piColumnSpan to 12
+            Set pbPromptButton to True
+
+            Procedure OnPrompt
+                Send NavigateForward of oSelectEquipo Self
+            End_Procedure
+        End_Object
+
+    End_Object
+
+    WebRegisterPath ntNavigateForward oSelectEquipo
+End_Object
