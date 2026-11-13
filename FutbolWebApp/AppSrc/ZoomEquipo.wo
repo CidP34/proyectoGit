@@ -1,0 +1,48 @@
+Use cWebView.pkg
+Use cWebForm.pkg
+Use cWebPanel.pkg
+Use cLigaDataDictionary.dd
+Use cEquipoDataDictionary.dd
+
+Register_Object oSelectLiga
+
+Object oZoomEquipo is a cWebView
+    Set psCaption to "Equipo"
+    Set peViewType to vtZoom
+    Set piColumnCount to 12
+
+    Object oLiga_DD is a cLigaDataDictionary
+    End_Object
+
+    Object oEquipo_DD is a cEquipoDataDictionary
+        Set DDO_Server to oLiga_DD
+    End_Object
+
+    Set Main_DD to oEquipo_DD
+    Set Server to oEquipo_DD
+
+    Object oWebMainPanel is a cWebPanel
+        Set piColumnCount to 12
+
+        Object oEquipoNombre is a cWebForm
+            Entry_Item Equipo.Nombre
+            Set psLabel to "Nombre"
+            Set piColumnSpan to 12
+        End_Object
+
+        // Padre: se elige navegando a su Select (nfFromChild)
+        Object oLigaNombre is a cWebForm
+            Entry_Item Liga.Nombre
+            Set psLabel to "Liga"
+            Set piColumnSpan to 12
+            Set pbPromptButton to True
+
+            Procedure OnPrompt
+                Send NavigateForward of oSelectLiga Self
+            End_Procedure
+        End_Object
+
+    End_Object
+
+    WebRegisterPath ntNavigateForward oSelectLiga
+End_Object
