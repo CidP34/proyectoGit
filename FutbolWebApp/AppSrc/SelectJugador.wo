@@ -1,0 +1,74 @@
+Use cWebView.pkg
+Use cWebList.pkg
+Use cWebColumn.pkg
+Use cLigaDataDictionary.dd
+Use cEquipoDataDictionary.dd
+Use cJugadorDataDictionary.dd
+
+Register_Object oZoomJugador
+
+Object oSelectJugador is a cWebView
+    Set psCaption to "Jugadores"
+    Set peViewType to vtSelect
+    Set piColumnCount to 12
+    Set pbFillHeight to True
+
+    Object oLiga_DD is a cLigaDataDictionary
+    End_Object
+
+    Object oEquipo_DD is a cEquipoDataDictionary
+        Set DDO_Server to oLiga_DD
+    End_Object
+
+    Object oJugador_DD is a cJugadorDataDictionary
+        Set DDO_Server to oEquipo_DD
+    End_Object
+
+    Set Main_DD to oJugador_DD
+    Set Server to oJugador_DD
+
+    Object oList is a cWebList
+        Set pbFillHeight to True
+        Set pbServerOnRowClick to True
+        Set psPlaceHolder to "No hay jugadores todavía"
+
+        Object oJugadorNombre is a cWebColumn
+            Entry_Item Jugador.Nombre
+            Set psCaption to "Nombre"
+            Set piWidth to 120
+        End_Object
+
+        Object oJugadorApellido is a cWebColumn
+            Entry_Item Jugador.Apellido
+            Set psCaption to "Apellido"
+            Set piWidth to 140
+        End_Object
+
+        Object oEquipoNombre is a cWebColumn
+            Entry_Item Equipo.Nombre
+            Set psCaption to "Equipo"
+            Set piWidth to 140
+        End_Object
+
+        Object oJugadorNacionalidad is a cWebColumn
+            Entry_Item Jugador.Nacionalidad
+            Set psCaption to "Nacionalidad"
+            Set piWidth to 110
+        End_Object
+
+        // Si venimos de un Zoom hijo buscando un valor, devolvemos la selección;
+        // si no, abrimos la ficha
+        Procedure OnRowClick String sRowID
+            tWebNavigateData NavigateData
+            Get GetNavigateData to NavigateData
+            If (NavigateData.eNavigateType = nfFromChild) Begin
+                Send NavigateClose Self
+            End
+            Else Begin
+                Send NavigateForward of oZoomJugador Self
+            End
+        End_Procedure
+    End_Object
+
+    WebRegisterPath ntNavigateForward oZoomJugador
+End_Object
