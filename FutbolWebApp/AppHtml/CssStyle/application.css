@@ -1,0 +1,62 @@
+/* =====================================================================
+   FutbolWebApp - Sprint 3 - Mejora visual
+   Añadir al final de AppHtml\CssStyle\application.css del workspace.
+   Si algún estilo no se aplica, inspeccionar con F12 en el navegador
+   y ajustar el selector a la clase que genera el tema.
+   ===================================================================== */
+
+/* ---------- Tarjetas del Dashboard ---------- */
+.Tile .WebCon_Sizer {
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    cursor: pointer;
+}
+
+.Tile .WebCon_Sizer:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+/* Un color por tabla (colores de la plantilla Data Control) */
+.TileLiga.Tile .WebCon_Sizer       { background: #0B2A3B; }
+.TileEquipo.Tile .WebCon_Sizer     { background: #00A676; }
+.TileEntrenador.Tile .WebCon_Sizer { background: #1F5F7A; }
+.TileJugador.Tile .WebCon_Sizer    { background: #00D18F; }
+.TilePosicion.Tile .WebCon_Sizer   { background: #5A6B72; }
+
+/* Contenido de la tarjeta */
+.TileContenido {
+    display: block;
+    height: 100%;
+    color: #FFFFFF;
+}
+
+.Tile_Emoji {
+    font-size: 40px;
+    line-height: 1.1;
+    margin-bottom: 6px;
+}
+
+.Tile .Tile_BigLabel,
+.Tile .Tile_SmallLabel {
+    color: #FFFFFF;
+}
+
+/* ---------- Listas ---------- */
+/* Columna secundaria (nacionalidad) en gris y cursiva */
+.ColSecundaria {
+    color: #5A6B72;
+    font-style: italic;
+}
+
+/* Columna numérica alineada a la derecha */
+.ColNumero {
+    text-align: right;
+}
+
+/* ---------- Avisos de campos obligatorios ---------- */
+.CampoObligatorio .WebFrm_Label:after {
+    content: " *";
+    color: #D9534F;
+}
