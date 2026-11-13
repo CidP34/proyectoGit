@@ -1,0 +1,10 @@
+# Compilados y temporales de DataFlex
+Programs/*.exe
+Programs/*.dbg
+AppSrc/*.prp
+AppSrc/*.prn
+AppSrc/*.pbg
+AppSrc/*.dep
+AppSrc/*.err
+*.bak
+*.log
