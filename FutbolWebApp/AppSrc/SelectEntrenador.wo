@@ -1,0 +1,68 @@
+Use cWebView.pkg
+Use cWebList.pkg
+Use cWebColumn.pkg
+Use cLigaDataDictionary.dd
+Use cEquipoDataDictionary.dd
+Use cEntrenadorDataDictionary.dd
+
+Register_Object oZoomEntrenador
+
+Object oSelectEntrenador is a cWebView
+    Set psCaption to "Entrenadores"
+    Set peViewType to vtSelect
+    Set piColumnCount to 12
+    Set pbFillHeight to True
+
+    Object oLiga_DD is a cLigaDataDictionary
+    End_Object
+
+    Object oEquipo_DD is a cEquipoDataDictionary
+        Set DDO_Server to oLiga_DD
+    End_Object
+
+    Object oEntrenador_DD is a cEntrenadorDataDictionary
+        Set DDO_Server to oEquipo_DD
+    End_Object
+
+    Set Main_DD to oEntrenador_DD
+    Set Server to oEntrenador_DD
+
+    Object oList is a cWebList
+        Set pbFillHeight to True
+        Set pbServerOnRowClick to True
+        Set psPlaceHolder to "No hay entrenadores todavía"
+
+        Object oEntrenadorNombre is a cWebColumn
+            Entry_Item Entrenador.Nombre
+            Set psCaption to "Nombre"
+            Set piWidth to 120
+        End_Object
+
+        Object oEntrenadorApellido is a cWebColumn
+            Entry_Item Entrenador.Apellido
+            Set psCaption to "Apellido"
+            Set piWidth to 140
+        End_Object
+
+        Object oEquipoNombre is a cWebColumn
+            Entry_Item Equipo.Nombre
+            Set psCaption to "Equipo"
+            Set piWidth to 160
+        End_Object
+
+        // Si venimos de un Zoom hijo buscando un valor, devolvemos la selección;
+        // si no, abrimos la ficha
+        Procedure OnRowClick String sRowID
+            tWebNavigateData NavigateData
+            Get GetNavigateData to NavigateData
+            If (NavigateData.eNavigateType = nfFromChild) Begin
+                Send NavigateClose Self
+            End
+            Else Begin
+                Send NavigateForward of oZoomEntrenador Self
+            End
+        End_Procedure
+    End_Object
+
+    WebRegisterPath ntNavigateForward oZoomEntrenador
+End_Object

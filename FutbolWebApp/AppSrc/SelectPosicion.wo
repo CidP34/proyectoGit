@@ -1,0 +1,47 @@
+Use cWebView.pkg
+Use cWebList.pkg
+Use cWebColumn.pkg
+Use cPosicionDataDictionary.dd
+
+Register_Object oZoomPosicion
+Register_Object oZoomJugador
+
+Object oSelectPosicion is a cWebView
+    Set psCaption to "Posiciones"
+    Set peViewType to vtSelect
+    Set piColumnCount to 12
+    Set pbFillHeight to True
+
+    Object oPosicion_DD is a cPosicionDataDictionary
+    End_Object
+
+    Set Main_DD to oPosicion_DD
+    Set Server to oPosicion_DD
+
+    Object oList is a cWebList
+        Set pbFillHeight to True
+        Set pbServerOnRowClick to True
+        Set psPlaceHolder to "No hay posiciones todavía"
+
+        Object oPosicionNombre is a cWebColumn
+            Entry_Item Posicion.Nombre
+            Set psCaption to "Posición"
+            Set piWidth to 200
+        End_Object
+
+        // Si venimos de un Zoom hijo buscando un valor, devolvemos la selección;
+        // si no, abrimos la ficha
+        Procedure OnRowClick String sRowID
+            tWebNavigateData NavigateData
+            Get GetNavigateData to NavigateData
+            If (NavigateData.eNavigateType = nfFromChild) Begin
+                Send NavigateClose Self
+            End
+            Else Begin
+                Send NavigateForward of oZoomPosicion Self
+            End
+        End_Procedure
+    End_Object
+
+    WebRegisterPath ntNavigateForward oZoomPosicion
+End_Object

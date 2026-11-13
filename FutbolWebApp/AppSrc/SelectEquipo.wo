@@ -1,0 +1,57 @@
+Use cWebView.pkg
+Use cWebList.pkg
+Use cWebColumn.pkg
+Use cLigaDataDictionary.dd
+Use cEquipoDataDictionary.dd
+
+Register_Object oZoomEquipo
+
+Object oSelectEquipo is a cWebView
+    Set psCaption to "Equipos"
+    Set peViewType to vtSelect
+    Set piColumnCount to 12
+    Set pbFillHeight to True
+
+    Object oLiga_DD is a cLigaDataDictionary
+    End_Object
+
+    Object oEquipo_DD is a cEquipoDataDictionary
+        Set DDO_Server to oLiga_DD
+    End_Object
+
+    Set Main_DD to oEquipo_DD
+    Set Server to oEquipo_DD
+
+    Object oList is a cWebList
+        Set pbFillHeight to True
+        Set pbServerOnRowClick to True
+        Set psPlaceHolder to "No hay equipos todavía"
+
+        Object oEquipoNombre is a cWebColumn
+            Entry_Item Equipo.Nombre
+            Set psCaption to "Nombre"
+            Set piWidth to 200
+        End_Object
+
+        Object oLigaNombre is a cWebColumn
+            Entry_Item Liga.Nombre
+            Set psCaption to "Liga"
+            Set piWidth to 160
+        End_Object
+
+        // Si venimos de un Zoom hijo buscando un valor, devolvemos la selección;
+        // si no, abrimos la ficha
+        Procedure OnRowClick String sRowID
+            tWebNavigateData NavigateData
+            Get GetNavigateData to NavigateData
+            If (NavigateData.eNavigateType = nfFromChild) Begin
+                Send NavigateClose Self
+            End
+            Else Begin
+                Send NavigateForward of oZoomEquipo Self
+            End
+        End_Procedure
+    End_Object
+
+    WebRegisterPath ntNavigateForward oZoomEquipo
+End_Object
