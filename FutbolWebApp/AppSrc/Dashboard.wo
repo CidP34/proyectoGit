@@ -19,9 +19,12 @@ Object oDashboard is a cWebView
 
         Object oTileLiga is a cWebHtmlBox
             Set piColumnSpan to 4
-            Set psCSSClass to "Tile"
+            Set psCSSClass to "Tile TileLiga"
             Set pbServerOnClick to True
-            Set psHtml to '<div class="Tile_BigLabel" data-ServerOnClick="tile" data-OnClickParam="liga">Ligas</div><div class="Tile_SmallLabel">Competiciones</div>'
+            Set psHtml to ('<div class="TileContenido" data-ServerOnClick="tile" data-OnClickParam="liga">' + ;
+                           '<div class="Tile_Emoji">🏆</div>' + ;
+                           '<div class="Tile_BigLabel">Ligas</div>' + ;
+                           '<div class="Tile_SmallLabel">Competiciones</div></div>')
 
             Procedure OnClick String sId String sParam
                 Send NavigateForward of oSelectLiga Self
@@ -31,9 +34,12 @@ Object oDashboard is a cWebView
         Object oTileEquipo is a cWebHtmlBox
             Set piColumnSpan to 4
             Set piColumnIndex to 4
-            Set psCSSClass to "Tile DarkAlternate"
+            Set psCSSClass to "Tile TileEquipo"
             Set pbServerOnClick to True
-            Set psHtml to '<div class="Tile_BigLabel" data-ServerOnClick="tile" data-OnClickParam="equipo">Equipos</div><div class="Tile_SmallLabel">Clubes por liga</div>'
+            Set psHtml to ('<div class="TileContenido" data-ServerOnClick="tile" data-OnClickParam="equipo">' + ;
+                           '<div class="Tile_Emoji">🛡️</div>' + ;
+                           '<div class="Tile_BigLabel">Equipos</div>' + ;
+                           '<div class="Tile_SmallLabel">Clubes por liga</div></div>')
 
             Procedure OnClick String sId String sParam
                 Send NavigateForward of oSelectEquipo Self
@@ -43,9 +49,12 @@ Object oDashboard is a cWebView
         Object oTileEntrenador is a cWebHtmlBox
             Set piColumnSpan to 4
             Set piColumnIndex to 8
-            Set psCSSClass to "Tile Dark"
+            Set psCSSClass to "Tile TileEntrenador"
             Set pbServerOnClick to True
-            Set psHtml to '<div class="Tile_BigLabel" data-ServerOnClick="tile" data-OnClickParam="entrenador">Entrenadores</div><div class="Tile_SmallLabel">Cuerpo técnico</div>'
+            Set psHtml to ('<div class="TileContenido" data-ServerOnClick="tile" data-OnClickParam="entrenador">' + ;
+                           '<div class="Tile_Emoji">📋</div>' + ;
+                           '<div class="Tile_BigLabel">Entrenadores</div>' + ;
+                           '<div class="Tile_SmallLabel">Cuerpo técnico</div></div>')
 
             Procedure OnClick String sId String sParam
                 Send NavigateForward of oSelectEntrenador Self
@@ -54,9 +63,12 @@ Object oDashboard is a cWebView
 
         Object oTileJugador is a cWebHtmlBox
             Set piColumnSpan to 6
-            Set psCSSClass to "Tile LightAlternate"
+            Set psCSSClass to "Tile TileJugador"
             Set pbServerOnClick to True
-            Set psHtml to '<div class="Tile_BigLabel" data-ServerOnClick="tile" data-OnClickParam="jugador">Jugadores</div><div class="Tile_SmallLabel">Plantillas</div>'
+            Set psHtml to ('<div class="TileContenido" data-ServerOnClick="tile" data-OnClickParam="jugador">' + ;
+                           '<div class="Tile_Emoji">⚽</div>' + ;
+                           '<div class="Tile_BigLabel">Jugadores</div>' + ;
+                           '<div class="Tile_SmallLabel">Plantillas</div></div>')
 
             Procedure OnClick String sId String sParam
                 Send NavigateForward of oSelectJugador Self
@@ -66,9 +78,12 @@ Object oDashboard is a cWebView
         Object oTilePosicion is a cWebHtmlBox
             Set piColumnSpan to 6
             Set piColumnIndex to 6
-            Set psCSSClass to "Tile"
+            Set psCSSClass to "Tile TilePosicion"
             Set pbServerOnClick to True
-            Set psHtml to '<div class="Tile_BigLabel" data-ServerOnClick="tile" data-OnClickParam="posicion">Posiciones</div><div class="Tile_SmallLabel">Portero, defensa…</div>'
+            Set psHtml to ('<div class="TileContenido" data-ServerOnClick="tile" data-OnClickParam="posicion">' + ;
+                           '<div class="Tile_Emoji">🧤</div>' + ;
+                           '<div class="Tile_BigLabel">Posiciones</div>' + ;
+                           '<div class="Tile_SmallLabel">Portero, defensa…</div></div>')
 
             Procedure OnClick String sId String sParam
                 Send NavigateForward of oSelectPosicion Self

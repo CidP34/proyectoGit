@@ -33,12 +33,14 @@ Object oZoomEntrenador is a cWebView
             Entry_Item Entrenador.Nombre
             Set psLabel to "Nombre"
             Set piColumnSpan to 12
+            Set psCSSClass to "CampoObligatorio"
         End_Object
 
         Object oEntrenadorApellido is a cWebForm
             Entry_Item Entrenador.Apellido
             Set psLabel to "Apellido"
             Set piColumnSpan to 12
+            Set psCSSClass to "CampoObligatorio"
         End_Object
 
         Object oEntrenadorNacionalidad is a cWebForm
@@ -62,23 +64,4 @@ Object oZoomEntrenador is a cWebView
     End_Object
 
     WebRegisterPath ntNavigateForward oSelectEquipo
-
-    // Sprint 2: muestra el tipo de navegación recibido
-    Procedure OnNavigateForward tWebNavigateData NavigateData Handle hoInvokingView Handle hoInvokingObject
-        String sTipo
-        Case Begin
-            Case (NavigateData.eNavigateType = nfFromMain)
-                Move "FromMain" to sTipo
-                Case Break
-            Case (NavigateData.eNavigateType = nfFromChild)
-                Move "FromChild" to sTipo
-                Case Break
-            Case (NavigateData.eNavigateType = nfFromParent)
-                Move "FromParent" to sTipo
-                Case Break
-            Case Else
-                Move "Undefined" to sTipo
-        Case End
-        Send ShowInfoBox ("Navegación: " + sTipo)
-    End_Procedure
 End_Object

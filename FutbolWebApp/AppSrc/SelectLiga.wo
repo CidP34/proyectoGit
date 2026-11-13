@@ -38,12 +38,14 @@ Object oSelectLiga is a cWebView
             Entry_Item Liga.Equipos
             Set psCaption to "Equipos"
             Set piWidth to 70
+            Set psCSSClass to "ColNumero"
         End_Object
 
         Object oLigaEquiposMax is a cWebColumn
             Entry_Item Liga.EquiposMax
             Set psCaption to "Máx."
             Set piWidth to 60
+            Set psCSSClass to "ColNumero"
         End_Object
 
         // Si venimos de un Zoom hijo buscando un valor, devolvemos la selección;
@@ -61,23 +63,4 @@ Object oSelectLiga is a cWebView
     End_Object
 
     WebRegisterPath ntNavigateForward oZoomLiga
-
-    // Sprint 2: muestra el tipo de navegación recibido
-    Procedure OnNavigateForward tWebNavigateData NavigateData Handle hoInvokingView Handle hoInvokingObject
-        String sTipo
-        Case Begin
-            Case (NavigateData.eNavigateType = nfFromMain)
-                Move "FromMain" to sTipo
-                Case Break
-            Case (NavigateData.eNavigateType = nfFromChild)
-                Move "FromChild" to sTipo
-                Case Break
-            Case (NavigateData.eNavigateType = nfFromParent)
-                Move "FromParent" to sTipo
-                Case Break
-            Case Else
-                Move "Undefined" to sTipo
-        Case End
-        Send ShowInfoBox ("Navegación: " + sTipo)
-    End_Procedure
 End_Object

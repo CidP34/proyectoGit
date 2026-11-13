@@ -33,12 +33,14 @@ Object oZoomLiga is a cWebView
             Entry_Item Liga.Nombre
             Set psLabel to "Nombre"
             Set piColumnSpan to 12
+            Set psCSSClass to "CampoObligatorio"
         End_Object
 
         Object oLigaPais is a cWebForm
             Entry_Item Liga.Pais
             Set psLabel to "País"
             Set piColumnSpan to 12
+            Set psCSSClass to "CampoObligatorio"
         End_Object
 
         Object oLigaEquipos is a cWebForm
@@ -57,6 +59,7 @@ Object oZoomLiga is a cWebView
         Object oVerEquipos is a cWebButton
             Set psCaption to "Ver equipos"
             Set piColumnSpan to 4
+            Set psCSSClass to "WebIcon_Find"
 
             Procedure OnClick
                 Send NavigateForward of oSelectEquipo Self
@@ -88,23 +91,4 @@ Object oZoomLiga is a cWebView
 
     WebRegisterPath ntNavigateForward oSelectEquipo
     WebRegisterPath ntNavigateForward oZoomEquipo
-
-    // Sprint 2: muestra el tipo de navegación recibido
-    Procedure OnNavigateForward tWebNavigateData NavigateData Handle hoInvokingView Handle hoInvokingObject
-        String sTipo
-        Case Begin
-            Case (NavigateData.eNavigateType = nfFromMain)
-                Move "FromMain" to sTipo
-                Case Break
-            Case (NavigateData.eNavigateType = nfFromChild)
-                Move "FromChild" to sTipo
-                Case Break
-            Case (NavigateData.eNavigateType = nfFromParent)
-                Move "FromParent" to sTipo
-                Case Break
-            Case Else
-                Move "Undefined" to sTipo
-        Case End
-        Send ShowInfoBox ("Navegación: " + sTipo)
-    End_Procedure
 End_Object

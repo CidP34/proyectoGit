@@ -54,6 +54,7 @@ Object oSelectJugador is a cWebView
             Entry_Item Jugador.Nacionalidad
             Set psCaption to "Nacionalidad"
             Set piWidth to 110
+            Set psCSSClass to "ColSecundaria"
         End_Object
 
         // Si venimos de un Zoom hijo buscando un valor, devolvemos la selección;
@@ -71,23 +72,4 @@ Object oSelectJugador is a cWebView
     End_Object
 
     WebRegisterPath ntNavigateForward oZoomJugador
-
-    // Sprint 2: muestra el tipo de navegación recibido
-    Procedure OnNavigateForward tWebNavigateData NavigateData Handle hoInvokingView Handle hoInvokingObject
-        String sTipo
-        Case Begin
-            Case (NavigateData.eNavigateType = nfFromMain)
-                Move "FromMain" to sTipo
-                Case Break
-            Case (NavigateData.eNavigateType = nfFromChild)
-                Move "FromChild" to sTipo
-                Case Break
-            Case (NavigateData.eNavigateType = nfFromParent)
-                Move "FromParent" to sTipo
-                Case Break
-            Case Else
-                Move "Undefined" to sTipo
-        Case End
-        Send ShowInfoBox ("Navegación: " + sTipo)
-    End_Procedure
 End_Object
