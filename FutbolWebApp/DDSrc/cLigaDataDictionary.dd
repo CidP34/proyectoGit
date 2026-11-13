@@ -15,6 +15,35 @@ Class cLigaDataDictionary is a DataDictionary
         Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True
         Set Foreign_Field_Option DD_INDEXFIELD DD_NOPUT to True
         Set Foreign_Field_Option DD_DEFAULT DD_DISPLAYONLY to True
+
+        Set Cascade_Delete_State to False
+
+        Set Field_Option Field Liga.Nombre DD_Required to True
+        Set Field_Option Field Liga.Pais DD_Required to True
+
+        Set Field_Option Field Liga.Equipos DD_DisplayOnly to True
+        Set Field_Label_Long Field Liga.Equipos to "Equipos inscritos"
+        Set Field_Label_Long Field Liga.EquiposMax to "Máximo de equipos"
+        Set Status_Help Field Liga.EquiposMax to "Número máximo de equipos de la liga (entre 2 y 24)"
+        Set Field_Validate_msg Field Liga.EquiposMax to (RefFunc(ValidarEquiposMax))
     End_Procedure
+
+    Procedure Field_Defaults
+        Forward Send Field_Defaults
+        Set Field_Changed_Value Field Liga.EquiposMax to 20
+    End_Procedure
+
+    // 0 = válido; distinto de 0 = error
+    Function ValidarEquiposMax Integer iField Integer iValor Returns Integer
+        If (iValor < 2 or iValor > 24) Begin
+            Send UserError "El máximo de equipos debe estar entre 2 y 24"
+            Function_Return 1
+        End
+        If (iValor < Liga.Equipos) Begin
+            Send UserError "La liga ya tiene más equipos inscritos que ese máximo"
+            Function_Return 1
+        End
+        Function_Return 0
+    End_Function
 
 End_Class
