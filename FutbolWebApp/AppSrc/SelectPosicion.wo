@@ -18,6 +18,11 @@ Object oSelectPosicion is a cWebView
     Set Main_DD to oPosicion_DD
     Set Server to oPosicion_DD
 
+    // Desde el Dashboard también llega como nfUndefined: se distingue por la
+    // vista que la invoca (ZoomJugador = asignar posición a un jugador)
+    { WebProperty=Server }
+    Property Boolean pbModoAsignar False
+
     Object oList is a cWebList
         Set pbFillHeight to True
         Set pbServerOnRowClick to True
@@ -29,13 +34,11 @@ Object oSelectPosicion is a cWebView
             Set piWidth to 200
         End_Object
 
-        // Si venimos de un Zoom hijo buscando un valor, devolvemos la selección;
-        // si no, abrimos la ficha
         Procedure OnRowClick String sRowID
-            tWebNavigateData NavigateData
-            Get GetNavigateData to NavigateData
-            If (NavigateData.eNavigateType = nfFromChild) Begin
-                Send NavigateClose Self
+            Boolean bAsignar
+            WebGet pbModoAsignar of oSelectPosicion to bAsignar
+            If bAsignar Begin
+                Send NavigateClose Self      // devuelve la posición al jugador
             End
             Else Begin
                 Send NavigateForward of oZoomPosicion Self
@@ -44,4 +47,8 @@ Object oSelectPosicion is a cWebView
     End_Object
 
     WebRegisterPath ntNavigateForward oZoomPosicion
+
+    Procedure OnNavigateForward tWebNavigateData NavigateData Handle hoInvokingView Handle hoInvokingObject
+        WebSet pbModoAsignar to (hoInvokingView = oZoomJugador)
+    End_Procedure
 End_Object
