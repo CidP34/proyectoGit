@@ -1,0 +1,85 @@
+Use cWebView.pkg
+Use cWebGroup.pkg
+Use cWebHtmlBox.pkg
+
+Use SelectLiga.wo
+Use SelectEquipo.wo
+Use SelectEntrenador.wo
+Use SelectJugador.wo
+Use SelectPosicion.wo
+
+Object oDashboard is a cWebView
+    Set psCaption to "FutbolWebApp"
+    Set piColumnCount to 12
+
+    Object oTiles_grp is a cWebGroup
+        Set pbShowBorder to False
+        Set piColumnCount to 12
+        Set psCSSClass to "TilesGroup"
+
+        Object oTileLiga is a cWebHtmlBox
+            Set piColumnSpan to 4
+            Set psCSSClass to "Tile"
+            Set pbServerOnClick to True
+            Set psHtml to '<div class="Tile_BigLabel" data-ServerOnClick="tile" data-OnClickParam="liga">Ligas</div><div class="Tile_SmallLabel">Competiciones</div>'
+
+            Procedure OnClick String sId String sParam
+                Send NavigateForward of oSelectLiga Self
+            End_Procedure
+        End_Object
+
+        Object oTileEquipo is a cWebHtmlBox
+            Set piColumnSpan to 4
+            Set piColumnIndex to 4
+            Set psCSSClass to "Tile DarkAlternate"
+            Set pbServerOnClick to True
+            Set psHtml to '<div class="Tile_BigLabel" data-ServerOnClick="tile" data-OnClickParam="equipo">Equipos</div><div class="Tile_SmallLabel">Clubes por liga</div>'
+
+            Procedure OnClick String sId String sParam
+                Send NavigateForward of oSelectEquipo Self
+            End_Procedure
+        End_Object
+
+        Object oTileEntrenador is a cWebHtmlBox
+            Set piColumnSpan to 4
+            Set piColumnIndex to 8
+            Set psCSSClass to "Tile Dark"
+            Set pbServerOnClick to True
+            Set psHtml to '<div class="Tile_BigLabel" data-ServerOnClick="tile" data-OnClickParam="entrenador">Entrenadores</div><div class="Tile_SmallLabel">Cuerpo técnico</div>'
+
+            Procedure OnClick String sId String sParam
+                Send NavigateForward of oSelectEntrenador Self
+            End_Procedure
+        End_Object
+
+        Object oTileJugador is a cWebHtmlBox
+            Set piColumnSpan to 6
+            Set psCSSClass to "Tile LightAlternate"
+            Set pbServerOnClick to True
+            Set psHtml to '<div class="Tile_BigLabel" data-ServerOnClick="tile" data-OnClickParam="jugador">Jugadores</div><div class="Tile_SmallLabel">Plantillas</div>'
+
+            Procedure OnClick String sId String sParam
+                Send NavigateForward of oSelectJugador Self
+            End_Procedure
+        End_Object
+
+        Object oTilePosicion is a cWebHtmlBox
+            Set piColumnSpan to 6
+            Set piColumnIndex to 6
+            Set psCSSClass to "Tile"
+            Set pbServerOnClick to True
+            Set psHtml to '<div class="Tile_BigLabel" data-ServerOnClick="tile" data-OnClickParam="posicion">Posiciones</div><div class="Tile_SmallLabel">Portero, defensa…</div>'
+
+            Procedure OnClick String sId String sParam
+                Send NavigateForward of oSelectPosicion Self
+            End_Procedure
+        End_Object
+
+    End_Object
+
+    WebRegisterPath ntNavigateForward oSelectLiga
+    WebRegisterPath ntNavigateForward oSelectEquipo
+    WebRegisterPath ntNavigateForward oSelectEntrenador
+    WebRegisterPath ntNavigateForward oSelectJugador
+    WebRegisterPath ntNavigateForward oSelectPosicion
+End_Object
