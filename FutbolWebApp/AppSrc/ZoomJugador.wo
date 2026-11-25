@@ -1,5 +1,6 @@
 Use cWebView.pkg
 Use cWebForm.pkg
+Use cWebCombo.pkg
 Use cWebPanel.pkg
 Use cWebButton.pkg
 Use cLigaDataDictionary.dd
@@ -55,7 +56,8 @@ Object oZoomJugador is a cWebView
             Set psCSSClass to "CampoObligatorio"
         End_Object
 
-        Object oJugadorNacionalidad is a cWebForm
+        // Sprint 4 - Desplegable: se rellena solo con la tabla de validación del DD
+        Object oJugadorNacionalidad is a cWebCombo
             Entry_Item Jugador.Nacionalidad
             Set psLabel to "Nacionalidad"
             Set piColumnSpan to 12

@@ -10,8 +10,15 @@ Class cJugadorPosicionDataDictionary is a DataDictionary
         Forward Send Construct_Object
         Set Main_File to JugadorPosicion.File_Number
 
+        // Sprint 4 - Clave primaria protegida: solo se asigna al crear el registro
+        Set Protect_Key_State to True
+        Set Key_Field_State Field JugadorPosicion.ID to True
+
         Set Add_Server_File to Jugador.File_Number
         Set Add_Server_File to Posicion.File_Number
+        // JugadorID y PosicionID son NOT NULL: ambos padres obligatorios
+        Set ParentNullAllowed Jugador.File_Number to False
+        Set ParentNullAllowed Posicion.File_Number to False
 
         Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
         Set Foreign_Field_Option DD_KEYFIELD DD_FINDREQ to True

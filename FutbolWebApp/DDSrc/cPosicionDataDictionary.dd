@@ -9,6 +9,10 @@ Class cPosicionDataDictionary is a DataDictionary
         Forward Send Construct_Object
         Set Main_File to Posicion.File_Number
 
+        // Sprint 4 - Clave primaria protegida: solo se asigna al crear el registro
+        Set Protect_Key_State to True
+        Set Key_Field_State Field Posicion.ID to True
+
         Set Add_Client_File to JugadorPosicion.File_Number
 
         Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
@@ -19,6 +23,10 @@ Class cPosicionDataDictionary is a DataDictionary
         Set Cascade_Delete_State to False
 
         Set Field_Option Field Posicion.Nombre DD_Required to True
+
+        // Sprint 4 - Nombre (y apellido) no modificables: DD_DisplayOnly
+        // (= DD_NoEnter + DD_NoPut: se ven en gris y no se pueden cambiar)
+        Set Field_Option Field Posicion.Nombre DD_DisplayOnly to True
     End_Procedure
 
 End_Class

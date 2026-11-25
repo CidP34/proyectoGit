@@ -1,6 +1,8 @@
 Use cWebView.pkg
 Use cWebForm.pkg
+Use cWebCombo.pkg
 Use cWebPanel.pkg
+Use cWebButton.pkg
 Use cLigaDataDictionary.dd
 Use cEquipoDataDictionary.dd
 Use cEntrenadorDataDictionary.dd
@@ -43,7 +45,8 @@ Object oZoomEntrenador is a cWebView
             Set psCSSClass to "CampoObligatorio"
         End_Object
 
-        Object oEntrenadorNacionalidad is a cWebForm
+        // Sprint 4 - Desplegable: se rellena solo con la tabla de validación del DD
+        Object oEntrenadorNacionalidad is a cWebCombo
             Entry_Item Entrenador.Nacionalidad
             Set psLabel to "Nacionalidad"
             Set piColumnSpan to 12
@@ -58,6 +61,28 @@ Object oZoomEntrenador is a cWebView
 
             Procedure OnPrompt
                 Send NavigateForward of oSelectEquipo Self
+            End_Procedure
+        End_Object
+
+        // Sprint 4 - Null: deja al entrenador sin equipo (EquipoID = NULL)
+        Object oDespedir is a cWebButton
+            Set psCaption to "Despedir"
+            Set piColumnSpan to 4
+            Set psCSSClass to "WebIcon_Delete"
+
+            Procedure OnClick
+                Boolean bHayEntrenador bHayEquipo
+                Get HasRecord of oEntrenador_DD to bHayEntrenador
+                Get HasRecord of oEquipo_DD to bHayEquipo
+                If (not(bHayEntrenador) or not(bHayEquipo)) Begin
+                    Send ShowInfoBox "Este entrenador ya no tiene equipo"
+                    Procedure_Return
+                End
+                // Vacía solo el DDO de Equipo (el padre); el entrenador sigue cargado
+                Send Request_ClearBindingTable of oEquipoNombre
+                // Al guardar sin padre, ParentNullAllowed deja EquipoID a NULL
+                Send Request_Save of oZoomEntrenador
+                Send ShowInfoBox "Entrenador despedido: ha quedado sin equipo"
             End_Procedure
         End_Object
 

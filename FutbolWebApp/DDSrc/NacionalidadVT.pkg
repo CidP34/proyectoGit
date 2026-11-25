@@ -1,0 +1,14 @@
+// =====================================================================
+// FutbolWebApp - Sprint 4 - Tabla de validación de nacionalidades
+// Los valores están en CodeMast con Type = "NACIONAL" (ver CodeType).
+// La usan cJugadorDataDictionary y cEntrenadorDataDictionary.
+// =====================================================================
+Use DataDict.pkg
+
+Open CodeMast
+
+Object oNacionalidad_VT is a CodeValidationTable
+    Set Type_Value to "NACIONAL"
+    // La nacionalidad admite NULL en la BD: se permite dejarla vacía
+    Set Allow_Blank_State to True
+End_Object
