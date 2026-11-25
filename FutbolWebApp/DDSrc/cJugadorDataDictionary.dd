@@ -1,4 +1,5 @@
 Use DataDict.pkg
+Use NacionalidadVT.pkg
 
 Open Jugador
 Open Equipo
@@ -34,6 +35,9 @@ Class cJugadorDataDictionary is a DataDictionary
         // (= DD_NoEnter + DD_NoPut: se ven en gris y no se pueden cambiar)
         Set Field_Option Field Jugador.Nombre DD_DisplayOnly to True
         Set Field_Option Field Jugador.Apellido DD_DisplayOnly to True
+
+        // Sprint 4 - Nacionalidad: solo valores de la tabla de validación (CodeMast)
+        Set Field_Value_Table Field Jugador.Nacionalidad to oNacionalidad_VT
     End_Procedure
 
     // Sprint 4 - Sin equipo: EquipoID se guarda como NULL y no como 0,
