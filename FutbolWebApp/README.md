@@ -16,7 +16,7 @@ Proyecto de prácticas — Data Control · Pablo Arrazola Trebol
 | --- | --- |
 | `Database/` | `futbol.sql`: crea la base de datos `futbol`; `sprint4_nacionalidades.sql`: tabla de validación de nacionalidades |
 | `DDSrc/` | Data Dictionaries: reglas de negocio de cada tabla, y `NacionalidadVT.pkg` (tabla de validación) |
-| `AppSrc/` | Vistas web: `Dashboard.wo` y una Select y una Zoom por tabla |
+| `AppSrc/` | Vistas web: `Dashboard.wo`, una Select y una Zoom por tabla, y `SelectJugadorPosicion.wo` (posiciones de un jugador) |
 | `AppHtml/CssStyle/` | `application.css`: estilos propios de la aplicación |
 | `Docs/` | Memorias de entrega de cada sprint (PDF) |
 
@@ -40,6 +40,7 @@ Proyecto de prácticas — Data Control · Pablo Arrazola Trebol
 | 3 · Data Dictionary y mejora visual | `v3.0-sprint3` | Reglas de negocio en los DD y nuevo aspecto de la aplicación |
 | 4 · Data Dictionary (II) | `v4.0-sprint4` | PK protegidas, nombre/apellido no modificables, NOT NULL obligatorios, botón «Despedir» (EquipoID a NULL) y nacionalidad en desplegable con CodeMast/CodeType |
 | 4 · Actualización | `v4.1-sprint4` | Gestión de Num_Equipos (`liga.Equipos`) al cambiar un equipo de liga y script de comprobación del contador |
+| 5 · JugadorPosición | `v5.0-sprint5` | Posiciones de cada jugador: lista y botón «Editar posiciones» en ZoomJugador; vista SelectJugadorPosicion con todas las posiciones, las del jugador y botones para añadir y quitar |
 
 ## Reglas de negocio (Data Dictionaries)
 
