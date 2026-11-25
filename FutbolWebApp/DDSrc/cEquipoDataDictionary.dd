@@ -18,6 +18,9 @@ Class cEquipoDataDictionary is a DataDictionary
         Set Add_Server_File to Liga.File_Number
         // LigaID es NOT NULL: todo equipo debe tener liga (valor por defecto, explícito)
         Set ParentNullAllowed Liga.File_Number to False
+        // Actualización Sprint 4 - Se permite cambiar un equipo de liga después de
+        // guardado; el contador Liga.Equipos (Num_Equipos) se ajusta en Backout/Update
+        Set ParentNoSwitchIfCommitted Liga.File_Number to False
         Set Add_Client_File to Jugador.File_Number
         Set Add_Client_File to Entrenador.File_Number
 
@@ -35,6 +38,17 @@ Class cEquipoDataDictionary is a DataDictionary
         // (= DD_NoEnter + DD_NoPut: se ven en gris y no se pueden cambiar)
         Set Field_Option Field Equipo.Nombre DD_DisplayOnly to True
     End_Procedure
+
+    // ------------------------------------------------------------------
+    // Gestión de Liga.Equipos (Num_Equipos)
+    //   Alta de equipo ............ Update  -> +1 en su liga
+    //   Baja de equipo ............ Backout -> -1 en su liga
+    //   Cambio de liga ............ Backout -> -1 en la liga ANTIGUA
+    //                               Update  -> +1 en la liga NUEVA
+    //   Edición sin cambiar liga .. Backout -1 y Update +1 en la misma (neto 0)
+    // Las dos ligas se graban en la misma transacción: si Validate_Save da
+    // error (liga nueva completa), se deshace todo y ningún contador cambia.
+    // ------------------------------------------------------------------
 
     // Valores NUEVOS al guardar
     Procedure Update
