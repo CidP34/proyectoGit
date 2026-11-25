@@ -15,6 +15,8 @@ Class cJugadorDataDictionary is a DataDictionary
         Set Key_Field_State Field Jugador.ID to True
 
         Set Add_Server_File to Equipo.File_Number
+        // Sprint 4 - EquipoID admite NULL: puede quedar sin equipo
+        Set ParentNullAllowed Equipo.File_Number to True
         Set Add_Client_File to JugadorPosicion.File_Number
 
         Set Foreign_Field_Option DD_KEYFIELD DD_NOPUT to True
@@ -32,6 +34,17 @@ Class cJugadorDataDictionary is a DataDictionary
         // (= DD_NoEnter + DD_NoPut: se ven en gris y no se pueden cambiar)
         Set Field_Option Field Jugador.Nombre DD_DisplayOnly to True
         Set Field_Option Field Jugador.Apellido DD_DisplayOnly to True
+    End_Procedure
+
+    // Sprint 4 - Sin equipo: EquipoID se guarda como NULL y no como 0,
+    // que violaría la clave ajena de MySQL (no existe el equipo 0)
+    Procedure Update
+        Integer iCol
+        Forward Send Update
+        If (Jugador.EquipoID = 0) Begin
+            Get_FieldNumber Jugador.EquipoID to iCol
+            Set_Attribute DF_FIELD_IS_NULL of Jugador.File_Number iCol to True
+        End
     End_Procedure
 
 End_Class
