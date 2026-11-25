@@ -1,0 +1,172 @@
+// =====================================================================
+// FutbolWebApp - Sprint 5 - SelectJugadorPosicion
+// Gestión de las posiciones de un jugador (tabla N:M jugadorposicion).
+// Se abre desde ZoomJugador con el botón «Editar posiciones»
+// (nfFromParent: jugador es padre de jugadorposicion).
+//   Izquierda: todas las posiciones   |   Derecha: las del jugador
+//   Botones: Añadir (izquierda -> derecha), Quitar y Hecho
+// =====================================================================
+Use cWebView.pkg
+Use cWebForm.pkg
+Use cWebGroup.pkg
+Use cWebList.pkg
+Use cWebColumn.pkg
+Use cWebButton.pkg
+Use cLigaDataDictionary.dd
+Use cEquipoDataDictionary.dd
+Use cJugadorDataDictionary.dd
+Use cPosicionDataDictionary.dd
+Use cJugadorPosicionDataDictionary.dd
+
+Object oSelectJugadorPosicion is a cWebView
+    Set psCaption to "Posiciones del jugador"
+    Set peViewType to vtSelect
+    Set piColumnCount to 12
+    Set pbFillHeight to True
+
+    // --- Estructura de DDs de la tabla intermedia ---
+    Object oLiga_DD is a cLigaDataDictionary
+    End_Object
+
+    Object oEquipo_DD is a cEquipoDataDictionary
+        Set DDO_Server to oLiga_DD
+    End_Object
+
+    Object oJugador_DD is a cJugadorDataDictionary
+        Set DDO_Server to oEquipo_DD
+    End_Object
+
+    Object oPosicion_DD is a cPosicionDataDictionary
+    End_Object
+
+    Object oJugadorPosicion_DD is a cJugadorPosicionDataDictionary
+        Set DDO_Server to oJugador_DD
+        Set DDO_Server to oPosicion_DD
+        Set Constrain_File to Jugador.File_Number    // solo las del jugador actual
+    End_Object
+
+    // DDO independiente (sin relación con el resto) para la lista de TODAS las posiciones
+    Object oTodasPosiciones_DD is a cPosicionDataDictionary
+    End_Object
+
+    Set Main_DD to oJugadorPosicion_DD
+    Set Server to oJugadorPosicion_DD
+
+    // --- Jugador cuyas posiciones se editan ---
+    Object oJugadorNombre is a cWebForm
+        Entry_Item Jugador.Nombre
+        Set psLabel to "Jugador"
+        Set piColumnSpan to 6
+    End_Object
+
+    Object oJugadorApellido is a cWebForm
+        Entry_Item Jugador.Apellido
+        Set psLabel to "Apellido"
+        Set piColumnSpan to 6
+        Set piColumnIndex to 6
+    End_Object
+
+    // --- Lista con todas las posiciones ---
+    Object oTodas_grp is a cWebGroup
+        Set psCaption to "Todas las posiciones"
+        Set piColumnSpan to 5
+        Set pbFillHeight to True
+
+        Object oTodasList is a cWebList
+            Set Server to oTodasPosiciones_DD
+            Set pbFillHeight to True
+            Set psPlaceHolder to "No hay posiciones"
+
+            Object oTodasNombre is a cWebColumn
+                Entry_Item Posicion.Nombre
+                Set psCaption to "Posición"
+            End_Object
+        End_Object
+    End_Object
+
+    // --- Botones ---
+    Object oBotones_grp is a cWebGroup
+        Set piColumnSpan to 2
+        Set piColumnIndex to 5
+        Set pbShowBorder to False
+
+        // Añade al jugador la posición seleccionada en la lista de la izquierda
+        Object oAnadir is a cWebButton
+            Set psCaption to "Añadir →"
+            Set psCSSClass to "WebIcon_Add"
+
+            Procedure OnClick
+                RowID riPosicion riJugador
+                Boolean bHayPosicion
+
+                Get HasRecord of oTodasPosiciones_DD to bHayPosicion
+                If (not(bHayPosicion)) Begin
+                    Send ShowInfoBox "Selecciona una posición en la lista de la izquierda"
+                    Procedure_Return
+                End
+                Get CurrentRowId of oTodasPosiciones_DD to riPosicion
+                Get CurrentRowId of oJugador_DD to riJugador
+
+                // Registro nuevo en jugadorposicion con los dos padres
+                Send Clear of oJugadorPosicion_DD
+                Send FindByRowId of oJugador_DD Jugador.File_Number riJugador
+                Send FindByRowId of oPosicion_DD Posicion.File_Number riPosicion
+                // El índice único (JugadorID, PosicionID) impide repetir una posición
+                Send Request_Save of oJugadorPosicion_DD
+
+                Send RefreshListFromDD of oJugadorList
+            End_Procedure
+        End_Object
+
+        // Quita al jugador la posición seleccionada en la lista de la derecha
+        Object oQuitar is a cWebButton
+            Set psCaption to "← Quitar"
+            Set psCSSClass to "WebIcon_Delete"
+
+            Procedure OnClick
+                Boolean bHay
+                Get HasRecord of oJugadorPosicion_DD to bHay
+                If (not(bHay)) Begin
+                    Send ShowInfoBox "Selecciona una posición del jugador en la lista de la derecha"
+                    Procedure_Return
+                End
+                Send Request_Delete of oJugadorPosicion_DD
+                Send RefreshListFromDD of oJugadorList
+            End_Procedure
+        End_Object
+
+        // Vuelve a ZoomJugador y le avisa para que refresque su lista
+        Object oHecho is a cWebButton
+            Set psCaption to "Hecho"
+
+            Procedure OnClick
+                Send NavigateClose Self
+            End_Procedure
+        End_Object
+    End_Object
+
+    // --- Lista con solo las posiciones de ese jugador ---
+    Object oJugador_grp is a cWebGroup
+        Set psCaption to "Posiciones del jugador"
+        Set piColumnSpan to 5
+        Set piColumnIndex to 7
+        Set pbFillHeight to True
+
+        Object oJugadorList is a cWebList
+            Set Server to oJugadorPosicion_DD
+            Set pbFillHeight to True
+            Set psPlaceHolder to "Este jugador no tiene posiciones"
+
+            Object oPosicionNombre is a cWebColumn
+                Entry_Item Posicion.Nombre
+                Set psCaption to "Posición"
+            End_Object
+        End_Object
+    End_Object
+
+    // Llega desde ZoomJugador (nfFromParent): el framework encuentra el jugador
+    // y restringe jugadorposicion a sus filas
+    Procedure OnNavigateForward tWebNavigateData NavigateData Handle hoInvokingView Handle hoInvokingObject
+        WebSet psCaption to ("Posiciones de " + Trim(Jugador.Nombre) + " " + Trim(Jugador.Apellido))
+    End_Procedure
+End_Object
