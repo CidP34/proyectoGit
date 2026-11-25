@@ -39,11 +39,12 @@ Proyecto de prácticas — Data Control · Pablo Arrazola Trebol
 | 2 · Navegación | `v2.0-sprint2` | FromMain (Select → Zoom), FromChild (Zoom hijo → Select padre), FromParent (botón «Ver equipos» y lista de equipos dentro de ZoomLiga) y Undefined (asignar posición a un jugador) |
 | 3 · Data Dictionary y mejora visual | `v3.0-sprint3` | Reglas de negocio en los DD y nuevo aspecto de la aplicación |
 | 4 · Data Dictionary (II) | `v4.0-sprint4` | PK protegidas, nombre/apellido no modificables, NOT NULL obligatorios, botón «Despedir» (EquipoID a NULL) y nacionalidad en desplegable con CodeMast/CodeType |
+| 4 · Actualización | `v4.1-sprint4` | Gestión de Num_Equipos (`liga.Equipos`) al cambiar un equipo de liga y script de comprobación del contador |
 
 ## Reglas de negocio (Data Dictionaries)
 
 - Nombre obligatorio en todas las tablas; apellido obligatorio en jugador y entrenador.
-- `Liga.Equipos` se mantiene solo: sube al crear un equipo y baja al borrarlo o cambiarlo de liga (`Update` / `Backout` en `cEquipoDataDictionary`).
+- `Liga.Equipos` (Num_Equipos) se mantiene solo: sube al crear un equipo, baja al borrarlo y, al cambiarlo de liga, resta en la antigua y suma en la nueva (`Backout` / `Update` en `cEquipoDataDictionary`). `Database/sprint4_comprobar_equipos.sql` lo verifica.
 - Una liga no admite más equipos que `Liga.EquiposMax` (`Validate_Save`); el máximo va de 2 a 24 y por defecto es 20.
 - No se puede borrar una liga con equipos, un equipo con jugadores o entrenador, ni una posición asignada.
 - Al borrar un jugador se borran sus posiciones asignadas.
