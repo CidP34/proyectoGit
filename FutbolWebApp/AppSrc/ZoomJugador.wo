@@ -3,13 +3,15 @@ Use cWebForm.pkg
 Use cWebCombo.pkg
 Use cWebPanel.pkg
 Use cWebButton.pkg
+Use cWebList.pkg
+Use cWebColumn.pkg
 Use cLigaDataDictionary.dd
 Use cEquipoDataDictionary.dd
 Use cJugadorDataDictionary.dd
 Use cPosicionDataDictionary.dd
 Use cJugadorPosicionDataDictionary.dd
 
-Register_Object oSelectPosicion
+Register_Object oSelectJugadorPosicion
 Register_Object oSelectEquipo
 
 Object oZoomJugador is a cWebView
@@ -34,6 +36,7 @@ Object oZoomJugador is a cWebView
     Object oJugadorPosicion_DD is a cJugadorPosicionDataDictionary
         Set DDO_Server to oJugador_DD
         Set DDO_Server to oPosicion_DD
+        Set Constrain_File to Jugador.File_Number    // Sprint 5: solo las del jugador
     End_Object
 
     Set Main_DD to oJugador_DD
@@ -75,33 +78,42 @@ Object oZoomJugador is a cWebView
             End_Procedure
         End_Object
 
-        // Sprint 2 - Undefined: jugador y posicion no se relacionan directamente
-        // (N:M a través de jugadorposicion)
-        Object oAsignarPosicion is a cWebButton
-            Set psCaption to "Asignar posición"
+        // Sprint 5 - Abre SelectJugadorPosicion para añadir y quitar posiciones
+        // (nfFromParent: jugador es padre de jugadorposicion)
+        Object oEditarPosiciones is a cWebButton
+            Set psCaption to "Editar posiciones"
             Set piColumnSpan to 4
             Set psCSSClass to "WebIcon_Add"
 
             Procedure OnClick
-                Send NavigateForward of oSelectPosicion Self
+                Send NavigateForward of oSelectJugadorPosicion Self
             End_Procedure
 
+            // Guarda el jugador antes de salir (si es nuevo, tiene que existir)
             Procedure OnGetNavigateForwardData tWebNavigateData ByRef NavigateData Handle hoToView
                 Move True to NavigateData.bSaveBeforeNavigate
             End_Procedure
 
-            // Al volver, NavigateData.sRowID es la posición elegida
+            // Al volver con «Hecho», se recarga la lista de posiciones
             Procedure OnNavigateBack Handle hoCallback tWebNavigateData NavigateData
-                RowID riPosicion
-                Move (DeserializeRowID(NavigateData.sRowID)) to riPosicion
-                Send Clear of oJugadorPosicion_DD
-                Send FindByRowID of oPosicion_DD Posicion.File_Number riPosicion
-                Send Request_Save of oJugadorPosicion_DD
+                Send RefreshListFromDD of oPosicionesList
             End_Procedure
+        End_Object
+
+        // Sprint 5 - Posiciones de este jugador (solo consulta)
+        Object oPosicionesList is a cWebList
+            Set Server to oJugadorPosicion_DD
+            Set piHeight to 180
+            Set psPlaceHolder to "Sin posiciones asignadas"
+
+            Object oPosicionNombre is a cWebColumn
+                Entry_Item Posicion.Nombre
+                Set psCaption to "Posiciones"
+            End_Object
         End_Object
 
     End_Object
 
-    WebRegisterPath ntNavigateForward oSelectPosicion
+    WebRegisterPath ntNavigateForward oSelectJugadorPosicion
     WebRegisterPath ntNavigateForward oSelectEquipo
 End_Object
