@@ -11,7 +11,13 @@ Class cEquipoDataDictionary is a DataDictionary
         Forward Send Construct_Object
         Set Main_File to Equipo.File_Number
 
+        // Sprint 4 - Clave primaria protegida: solo se asigna al crear el registro
+        Set Protect_Key_State to True
+        Set Key_Field_State Field Equipo.ID to True
+
         Set Add_Server_File to Liga.File_Number
+        // LigaID es NOT NULL: todo equipo debe tener liga (valor por defecto, explícito)
+        Set ParentNullAllowed Liga.File_Number to False
         Set Add_Client_File to Jugador.File_Number
         Set Add_Client_File to Entrenador.File_Number
 
@@ -24,6 +30,10 @@ Class cEquipoDataDictionary is a DataDictionary
 
         Set Field_Option Field Equipo.Nombre DD_Required to True
         Set Status_Help Field Equipo.Nombre to "Nombre oficial del club"
+
+        // Sprint 4 - Nombre (y apellido) no modificables: DD_DisplayOnly
+        // (= DD_NoEnter + DD_NoPut: se ven en gris y no se pueden cambiar)
+        Set Field_Option Field Equipo.Nombre DD_DisplayOnly to True
     End_Procedure
 
     // Valores NUEVOS al guardar
